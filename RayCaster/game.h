@@ -43,5 +43,6 @@ void turn_player(float amount);
 void move_player(float amount);
 Map *get_map(void);
 Object get_player(void);
+Wall get_wall(int index);
 
 #endif /* game_h */

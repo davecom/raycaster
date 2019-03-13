@@ -13,7 +13,8 @@ Map *map;
 mtx_t player_mutex;
 Wall walls[] = {
     {0, 0},
-    {80, 0x0000FFFF}
+    {80, 0x0000FFFF},
+    {80, 0x00AA11FF}
 };
 
 
@@ -23,12 +24,12 @@ void initialize() {
     map->height = 8;
     map->grid = malloc(sizeof(int) * map->width * map->height);
     memcpy(map->grid,
-           (int[]) {1, 0, 0, 0, 0, 1, 1, 1,
+           (int[]) {1, 0, 0, 0, 0, 2, 1, 1,
                     1, 0, 0, 0, 0, 0, 0, 1,
                     1, 0, 0, 0, 0, 0, 0, 1,
-                    1, 0, 0, 0, 0, 0, 0, 1,
-                    1, 0, 0, 0, 0, 0, 0, 1,
-                    1, 0, 0, 0, 0, 0, 0, 1,
+                    1, 0, 0, 0, 0, 0, 0, 2,
+                    1, 0, 0, 0, 0, 0, 0, 2,
+                    1, 0, 0, 0, 0, 0, 0, 2,
                     1, 0, 0, 0, 0, 0, 0, 1,
                     1, 1, 1, 1, 1, 1, 1, 1
            },
@@ -78,7 +79,7 @@ void draw_column(int x, Wall wall, float scale) {
         draw_pixel(x, y, 0xFFFFFFFF); // white
     }
     // calculate scaled color
-    scale = scale <= 1.0 ? scale : 1.0;
+    scale = scale <= 1.0 ? scale : 1.0; // don't lighten things, just darken them
     uint32_t color = brighten(wall.color, scale);
     for (int y = on_each_side; y < (SCREEN_HEIGHT - on_each_side); y++) {
         draw_pixel(x, y, color); // blue
@@ -154,4 +155,8 @@ Object get_player(void) {
     memcpy(&temp, player, sizeof(Object));
     mtx_unlock(&player_mutex);
     return temp;
+}
+
+Wall get_wall(int index) {
+    return walls[index];
 }

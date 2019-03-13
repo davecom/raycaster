@@ -197,8 +197,9 @@ void event_loop() {
                     rect.w = sl;
                     rect.x = x * sl;
                     rect.y = y * sl;
-                    if (map->grid[x + map->width * y] > 0) {
-                        SDL_SetRenderDrawColor(map_renderer, 255, 0, 0, 255); // red
+                    Wall wall = get_wall(map->grid[x + map->width * y]);
+                    if (wall.height > 0) {
+                        SDL_SetRenderDrawColor(map_renderer, (wall.color >> 24 & 0xFF), (wall.color >> 16 & 0xFF), (wall.color >> 8 & 0xFF), (wall.color & 0xFF)); // fill with wall color
                         SDL_RenderFillRect(map_renderer, &rect);
                     }
                     SDL_SetRenderDrawColor(map_renderer, 0, 0, 0, 255); // black
@@ -262,14 +263,6 @@ void display_main_window(const char *title) {
     SDL_SetRenderDrawColor(renderer, 0x00, 255, 0x00, 0x00);
     SDL_RenderClear(renderer);
 }
-
-//void draw_maps_pixel(int x, int y, byte palette_entry) {
-//    if (map) {
-//        mtx_lock(&map_mutex);
-//        map_pixels[(x + y * NES_WIDTH * 2)] = nes_palette[palette_entry];
-//        mtx_unlock(&map_mutex);
-//    }
-//}
 
 void draw_pixel(int x, int y, uint32_t color) {
     //printf("%d\n", palette_entry);
