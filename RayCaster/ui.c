@@ -105,17 +105,19 @@ void event_loop() {
                             break;
                         case SDLK_UP:
                             //joypad1.up = true;
+                            move_player(1.0);
                             break;
                         case SDLK_DOWN:
                             //joypad1.down = true;
+                            move_player(-1.0);
                             break;
                         case SDLK_LEFT:
                             //joypad1.left = true;
-                            turn_left(0.05);
+                            turn_player(-0.05);
                             break;
                         case SDLK_RIGHT:
                             //joypad1.right = true;
-                            turn_right(0.05);
+                            turn_player(0.05);
                             break;
                         case SDLK_d:
                             break;
@@ -215,15 +217,15 @@ void event_loop() {
             
             // draw sweep lines for 0 and 255
             SDL_SetRenderDrawColor(map_renderer, 0, 255, 0, 255); // black
-            float f = 250.0;
-            float a = atan2f(0, f); // angle of column
-            float ar = player.direction + a; // angle of ray
+            float f = 500.0;
+            float a = atan2f(SCREEN_WIDTH/2 - 0, f); // angle of column
+            float ar = player.direction - a; // angle of ray
             // step along the ray
             int sx = f * cos(ar) + player.x;
             int sy = f * sin(ar) + player.y;
             SDL_RenderDrawLine(map_renderer, playerx, playery, sx, sy);
-            a = atan2f(SCREEN_WIDTH, f); // angle of column
-            ar = player.direction + a; // angle of ray
+            a = atan2f(SCREEN_WIDTH/2 - SCREEN_WIDTH, f); // angle of column
+            ar = player.direction - a; // angle of ray
             // step along the ray
             sx = f * cos(ar) + player.x;
             sy = f * sin(ar) + player.y;

@@ -34,8 +34,8 @@ typedef struct {
 void initialize(void);
 int raycast(void *data);
 int map_query(int x, int y);
-void turn_left(float amount);
-void turn_right(float amount);
+void turn_player(float amount);
+void move_player(float amount);
 Map *get_map(void);
 Object get_player(void);
 

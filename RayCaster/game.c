@@ -54,7 +54,7 @@ int map_query(int x, int y) {
 // x is x, h is height
 void draw_wall(int x, int h) {
     int on_each_side = 0;
-    if (h < SCREEN_HEIGHT && h > 0) {
+    if (h < SCREEN_HEIGHT && h >= 0) {
         on_each_side = (SCREEN_HEIGHT - (int)h) / 2;
     }
     //printf("height: %d, on_each_side: %d", h, on_each_side);
@@ -71,12 +71,12 @@ void draw_wall(int x, int h) {
 
 int raycast(void *data) {
     initialize();
-    float f = 250.0; // focal length
+    float f = 500.0; // focal length
     while(1) {
         float direction = get_direction();
         for (int x = 0; x < SCREEN_WIDTH; x++) {
-            float a = atan2f(x, f); // angle of column
-            float ar = direction + a; // angle of ray
+            float a = atan2f(SCREEN_WIDTH/2 - x, f); // angle of column
+            float ar = direction - a; // angle of ray
             // step along the ray
             float wh = 0.0; // wall height
             float sx = 0.0;
@@ -93,28 +93,36 @@ int raycast(void *data) {
                 wh = map_query(sx, sy);
                 if (wh > 0) { break; } // done on first wall
             }
+            
             //printf("wh pre scale: %f", wh);
             // calculate wall height based on distance
-            float d = sqrtf(sx * sx + sy * sy); // d is distance
+            float d = sqrtf(dx * dx + dy * dy); // d is distance
             //float z = dx * cos(a - direction) + dy * sin(a - direction);
-            float z = d * cs;
-            wh = SCREEN_HEIGHT * wh / z;
+            float z = d * cos(a);
+            float fh = wh * (wh / z);
             //printf("wh post scale: %f", wh);
-            draw_wall(x, wh);
+            draw_wall(x, fh);
+//            if (x == 100) {
+//                printf("wall_height: %f final_height: %f a: %f ar: %f d: %d z: %d sx: %f sy: %f", wh, fh, a, ar, d, z, sx, sy);
+//            }
         }
     }
 }
 
-
-void turn_left(float amount) {
+void turn_player(float amount) {
     mtx_lock(&player_mutex);
-    player->direction -= amount;
+    player->direction += amount;
     mtx_unlock(&player_mutex);
 }
 
-void turn_right(float amount) {
+void move_player(float amount) {
     mtx_lock(&player_mutex);
-    player->direction += amount;
+    int newx = cos(player->direction) * amount + player->x;
+    int newy = sin(player->direction) * amount + player->y;
+    if (!map_query(newx, newy)) {
+        player->x = newx;
+        player->y = newy;
+    }
     mtx_unlock(&player_mutex);
 }
 
