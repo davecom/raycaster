@@ -31,9 +31,14 @@ typedef struct {
     int *grid;
 } Map;
 
+typedef struct {
+    int height;
+    uint32_t color;
+} Wall;
+
 void initialize(void);
 int raycast(void *data);
-int map_query(int x, int y);
+Wall map_query(int x, int y);
 void turn_player(float amount);
 void move_player(float amount);
 Map *get_map(void);
