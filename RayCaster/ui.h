@@ -14,11 +14,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2_image/SDL_image.h>
 #include "c11threads.h"
+#include "game.h"
 
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 240
+
+#define MAP_WIDTH 200
+#define MAP_HEIGHT 200
+
+#define PI 3.14159265358979323846
 
 void event_loop(void);
 void frame_ready(void);

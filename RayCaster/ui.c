@@ -10,61 +10,73 @@
 
 SDL_Window *window;
 SDL_Renderer *renderer;
-SDL_Texture *texture;
+SDL_Texture *texture = NULL;
 
-SDL_Window *nametable_window;
-SDL_Renderer *nametable_renderer;
-SDL_Texture *nametable_texture;
+SDL_Window *map_window;
+SDL_Renderer *map_renderer;
+SDL_Texture *player_texture = NULL;
 
-//typedef struct pixel_list {
-//    int x;
-//    int y;
-//    Uint8 r;
-//    Uint8 g;
-//    Uint8 b;
-//    Uint8 a;
-//    struct pixel_list *next;
-//} pixel_list;
-//
-//pixel_list * head_pixel = NULL;
 mtx_t pixel_list_mutex;
 mtx_t frame_ready_mutex;
 cnd_t frame_ready_condition;
-mtx_t nametable_debug_mutex;
-uint32_t *nametable_debug_pixels = NULL;
+mtx_t map_mutex;
 uint32_t pixels[(SCREEN_HEIGHT * SCREEN_WIDTH)]; // pixel buffer
+
+bool map_open = false;
 
 
 void frame_ready() {
     cnd_signal(&frame_ready_condition);
 }
 
-//void start_stop_nametable_debug() {
-//    if (nametable_debug) { // start
-//        nametable_debug_pixels = malloc(sizeof(uint32_t) * NES_WIDTH * 2 * NES_HEIGHT * 2);
-//        mtx_init(&nametable_debug_mutex, mtx_plain);
-//
-//        nametable_window = SDL_CreateWindow("Nametables", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, NES_WIDTH * 2, NES_HEIGHT * 2, SDL_WINDOW_ALLOW_HIGHDPI);
-//        if (nametable_window == NULL) {
-//            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create window: %s", SDL_GetError());
-//            return;
-//        }
-//        nametable_renderer = SDL_CreateRenderer(nametable_window, -1, SDL_RENDERER_ACCELERATED);
-//        if (nametable_renderer == NULL) {
-//            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create renderer: %s", SDL_GetError());
-//            return;
-//        }
-//        nametable_texture = SDL_CreateTexture(nametable_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, NES_WIDTH * 2, NES_HEIGHT * 2);
-//        SDL_SetRenderTarget(nametable_renderer, nametable_texture);
-//        SDL_SetRenderDrawColor(nametable_renderer, 0x00, 255, 0x00, 0x00);
-//        SDL_RenderClear(nametable_renderer);
-//    } else { // stop
-//        SDL_DestroyRenderer(nametable_renderer);
-//        SDL_DestroyWindow(nametable_window);
-//        SDL_DestroyTexture(nametable_texture);
-//        free(nametable_debug_pixels);
-//    }
-//}
+void start_stop_map_window() {
+    if (map_open) { // start
+        mtx_init(&map_mutex, mtx_plain);
+
+        map_window = SDL_CreateWindow("Map", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, MAP_WIDTH, MAP_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
+        if (map_window == NULL) {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create window: %s", SDL_GetError());
+            return;
+        }
+        map_renderer = SDL_CreateRenderer(map_window, -1, SDL_RENDERER_ACCELERATED);
+        if (map_renderer == NULL) {
+            SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create renderer: %s", SDL_GetError());
+            return;
+        }
+        SDL_Texture* newTexture = NULL;
+        
+        //Load image at specified path
+        SDL_Surface* loadedSurface = IMG_Load( "arrow.png" );
+        if( loadedSurface == NULL )
+        {
+            printf( "Unable to load image %s! SDL_image Error: %s\n", "arrow.png", IMG_GetError() );
+        }
+        else
+        {
+            //Color key image
+            SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+            
+            //Create texture from surface pixels
+            newTexture = SDL_CreateTextureFromSurface( map_renderer, loadedSurface );
+            if( newTexture == NULL )
+            {
+                printf( "Unable to create texture from %s! SDL Error: %s\n", "arrow.png", SDL_GetError() );
+            }
+            
+            //Get rid of old loaded surface
+            SDL_FreeSurface( loadedSurface );
+        }
+        
+        player_texture = newTexture;
+        SDL_SetRenderDrawColor(map_renderer, 0x00, 255, 0x00, 0x00);
+        SDL_RenderClear(map_renderer);
+    } else { // stop
+        SDL_DestroyRenderer(map_renderer);
+        SDL_DestroyWindow(map_window);
+        SDL_DestroyTexture(player_texture);
+        //free(map_pixels);
+    }
+}
 
 void event_loop() {
     SDL_Event e;
@@ -99,16 +111,17 @@ void event_loop() {
                             break;
                         case SDLK_LEFT:
                             //joypad1.left = true;
+                            turn_left(0.05);
                             break;
                         case SDLK_RIGHT:
                             //joypad1.right = true;
+                            turn_right(0.05);
                             break;
                         case SDLK_d:
-                            //debug = !debug;
                             break;
                         case SDLK_n:
-                            //nametable_debug = !nametable_debug;
-                            //start_stop_nametable_debug();
+                            //map = !map;
+                            //start_stop_map();
                             break;
                         default:
                             break;
@@ -140,6 +153,10 @@ void event_loop() {
                         case SDLK_RIGHT:
                             //joypad1.right = false;
                             break;
+                        case SDLK_m:
+                            map_open = !map_open;
+                            start_stop_map_window();
+                            break;
                         default:
                             break;
                     }
@@ -152,16 +169,6 @@ void event_loop() {
         
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black
         SDL_RenderClear(renderer);
-        // is there a pixel to draw?
-//        pixel_list *pixel = pop_pixel();
-//        while (pixel != NULL) {
-//            SDL_SetRenderTarget(renderer, texture);
-//            SDL_SetRenderDrawColor(renderer, pixel->r, pixel->g, pixel->b, pixel->a);
-//            SDL_RenderDrawPoint(renderer, pixel->x, pixel->y);
-//            free(pixel); // responsible for freeing
-//            pixel = pop_pixel();
-//        }
-        //cnd_wait(&frame_ready_condition, &frame_ready_mutex);
         mtx_lock(&pixel_list_mutex);
         //SDL_SetRenderTarget(renderer, texture);
         SDL_UpdateTexture(texture, NULL, pixels, SCREEN_WIDTH * 4);
@@ -170,17 +177,59 @@ void event_loop() {
         SDL_RenderCopy(renderer, texture, NULL, NULL); // blit texture
         SDL_RenderPresent(renderer);
         
-//        if (nametable_debug) {
-//            SDL_SetRenderDrawColor(nametable_renderer, 0, 0, 0, 255); // black
-//            SDL_RenderClear(nametable_renderer);
-//            mtx_lock(&nametable_debug_mutex);
-//            //SDL_SetRenderTarget(renderer, texture);
-//            SDL_UpdateTexture(nametable_texture, NULL, nametable_debug_pixels, NES_WIDTH * 4 * 2);
-//            mtx_unlock(&nametable_debug_mutex);
-//            SDL_SetRenderTarget(nametable_renderer, NULL);
-//            SDL_RenderCopy(nametable_renderer, nametable_texture, NULL, NULL); // blit texture
-//            SDL_RenderPresent(nametable_renderer);
-//        }
+        if (map_open) {
+            SDL_SetRenderDrawColor(map_renderer, 255, 255, 255, 255); // white
+            SDL_RenderClear(map_renderer);
+            mtx_lock(&map_mutex);
+            mtx_unlock(&map_mutex);
+            SDL_SetRenderTarget(map_renderer, NULL);
+            
+            // draw the map
+            Map *map = get_map();
+            int sl = MAP_WIDTH / map->width;
+            float playfield_length = map->width * TILE_LENGTH;
+            for (int x = 0; x < map->width; x++) {
+                for (int y = 0; y < map->height; y++) {
+                    SDL_Rect rect;
+                    rect.h = sl;
+                    rect.w = sl;
+                    rect.x = x * sl;
+                    rect.y = y * sl;
+                    if (map->grid[x + map->width * y] > 0) {
+                        SDL_SetRenderDrawColor(map_renderer, 255, 0, 0, 255); // red
+                        SDL_RenderFillRect(map_renderer, &rect);
+                    }
+                    SDL_SetRenderDrawColor(map_renderer, 0, 0, 0, 255); // black
+                    SDL_RenderDrawRect(map_renderer, &rect);
+                }
+            }
+            Object player = get_player();
+            SDL_Rect player_rect;
+            player_rect.h = 10;
+            player_rect.w = 20;
+            int playerx = player.x * (MAP_WIDTH / playfield_length);
+            int playery = player.y * (MAP_HEIGHT / playfield_length);
+            player_rect.x = playerx - 10;
+            player_rect.y = playery - 5;
+            SDL_RenderCopyEx(map_renderer, player_texture, NULL, &player_rect, player.direction * 180 / PI, NULL, SDL_FLIP_NONE);
+            
+            // draw sweep lines for 0 and 255
+            SDL_SetRenderDrawColor(map_renderer, 0, 255, 0, 255); // black
+            float f = 250.0;
+            float a = atan2f(0, f); // angle of column
+            float ar = player.direction + a; // angle of ray
+            // step along the ray
+            int sx = f * cos(ar) + player.x;
+            int sy = f * sin(ar) + player.y;
+            SDL_RenderDrawLine(map_renderer, playerx, playery, sx, sy);
+            a = atan2f(SCREEN_WIDTH, f); // angle of column
+            ar = player.direction + a; // angle of ray
+            // step along the ray
+            sx = f * cos(ar) + player.x;
+            sy = f * sin(ar) + player.y;
+            SDL_RenderDrawLine(map_renderer, playerx, playery, sx, sy);
+            SDL_RenderPresent(map_renderer);
+        }
         
         //SDL_Delay(16);
         //printf("end drawing loop");
@@ -212,11 +261,11 @@ void display_main_window(const char *title) {
     SDL_RenderClear(renderer);
 }
 
-//void draw_nametables_pixel(int x, int y, byte palette_entry) {
-//    if (nametable_debug) {
-//        mtx_lock(&nametable_debug_mutex);
-//        nametable_debug_pixels[(x + y * NES_WIDTH * 2)] = nes_palette[palette_entry];
-//        mtx_unlock(&nametable_debug_mutex);
+//void draw_maps_pixel(int x, int y, byte palette_entry) {
+//    if (map) {
+//        mtx_lock(&map_mutex);
+//        map_pixels[(x + y * NES_WIDTH * 2)] = nes_palette[palette_entry];
+//        mtx_unlock(&map_mutex);
 //    }
 //}
 
@@ -226,26 +275,6 @@ void draw_pixel(int x, int y, uint32_t color) {
     pixels[(x + y * SCREEN_WIDTH)] = color;
     mtx_unlock(&pixel_list_mutex);
 }
-
-//void draw_pixel(int x, int y, Uint8 r, Uint8 g, Uint8 b) {
-////    pixel_list *pixel = malloc(sizeof(pixel_list));
-////    pixel->x = x;
-////    pixel->y = y;
-////    pixel->r = r;
-////    pixel->g = g;
-////    pixel->b = b;
-////    pixel->a = 255;
-////    pixel->next = NULL;
-//    mtx_lock(&pixel_list_mutex);
-//    uint32_t temp = 0;
-//    temp |= (r << 24);
-//    temp |= (g << 16);
-//    temp |= (b << 8);
-//    temp |= 255;
-//    pixels[(x + y * NES_WIDTH)] = temp;
-//    mtx_unlock(&pixel_list_mutex);
-////    append_pixel(pixel);
-//}
 
 void ui_cleanup() {
     SDL_DestroyRenderer(renderer);

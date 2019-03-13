@@ -9,19 +9,26 @@
 /* Begin PBXBuildFile section */
 		55258B1F223767E20046A70A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 55258B1E223767E20046A70A /* main.c */; };
 		5560F3CE22376A0200EDC88C /* ui.c in Sources */ = {isa = PBXBuildFile; fileRef = 5560F3CC22376A0200EDC88C /* ui.c */; };
-		5560F3D022376D1200EDC88C /* SDL2.framework in Copy Bundle Frameworks */ = {isa = PBXBuildFile; fileRef = 5560F3CF22376D1200EDC88C /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5560F3D32237724900EDC88C /* game.c in Sources */ = {isa = PBXBuildFile; fileRef = 5560F3D22237724900EDC88C /* game.c */; };
+		55BF7F992238B91E00C0D5EE /* arrow.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 55BF7F982238B90D00C0D5EE /* arrow.png */; };
+		55BF7F9F2238BEE000C0D5EE /* SDL2_image.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 55BF7F9A2238BB0F00C0D5EE /* SDL2_image.framework */; };
+		55BF7FA02238BEE000C0D5EE /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5560F3CF22376D1200EDC88C /* SDL2.framework */; };
+		55BF7FA12238BEF200C0D5EE /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55BF7F9A2238BB0F00C0D5EE /* SDL2_image.framework */; };
+		55BF7FA22238BEF200C0D5EE /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5560F3CF22376D1200EDC88C /* SDL2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		55258B19223767E20046A70A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				55BF7F992238B91E00C0D5EE /* arrow.png in CopyFiles */,
+				55BF7F9F2238BEE000C0D5EE /* SDL2_image.framework in CopyFiles */,
+				55BF7FA02238BEE000C0D5EE /* SDL2.framework in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5560F3CA223768FD00EDC88C /* Copy Bundle Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -29,7 +36,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5560F3D022376D1200EDC88C /* SDL2.framework in Copy Bundle Frameworks */,
 			);
 			name = "Copy Bundle Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -45,6 +51,8 @@
 		5560F3CF22376D1200EDC88C /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = SDL/SDL2.framework; sourceTree = "<group>"; };
 		5560F3D12237724900EDC88C /* game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
 		5560F3D22237724900EDC88C /* game.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = game.c; sourceTree = "<group>"; };
+		55BF7F982238B90D00C0D5EE /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
+		55BF7F9A2238BB0F00C0D5EE /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = SDL/SDL2_image.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55BF7FA12238BEF200C0D5EE /* SDL2_image.framework in Frameworks */,
+				55BF7FA22238BEF200C0D5EE /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,9 +71,11 @@
 		55258B12223767E20046A70A = {
 			isa = PBXGroup;
 			children = (
+				55BF7F9A2238BB0F00C0D5EE /* SDL2_image.framework */,
 				5560F3CF22376D1200EDC88C /* SDL2.framework */,
 				55258B1D223767E20046A70A /* RayCaster */,
 				55258B1C223767E20046A70A /* Products */,
+				55BF7F9C2238BD9400C0D5EE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -78,6 +90,7 @@
 		55258B1D223767E20046A70A /* RayCaster */ = {
 			isa = PBXGroup;
 			children = (
+				55BF7F982238B90D00C0D5EE /* arrow.png */,
 				5560F3CB22376A0200EDC88C /* c11threads.h */,
 				5560F3CC22376A0200EDC88C /* ui.c */,
 				5560F3CD22376A0200EDC88C /* ui.h */,
@@ -86,6 +99,13 @@
 				5560F3D22237724900EDC88C /* game.c */,
 			);
 			path = RayCaster;
+			sourceTree = "<group>";
+		};
+		55BF7F9C2238BD9400C0D5EE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,12 +290,11 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 59VX8JQ7R6;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/SDL\"";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/SDL/SDL2.framework/Headers\"";
-				OTHER_LDFLAGS = (
-					"-framework",
-					SDL2,
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SDL",
 				);
+				HEADER_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -285,12 +304,11 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 59VX8JQ7R6;
-				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/SDL\"";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/SDL/SDL2.framework/Headers\"";
-				OTHER_LDFLAGS = (
-					"-framework",
-					SDL2,
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SDL",
 				);
+				HEADER_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
