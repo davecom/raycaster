@@ -1,5 +1,5 @@
 //
-//  DDUI.c
+//  ui.c
 //  DDNES
 //
 //  Created by David Kopec on 7/10/18.
@@ -78,7 +78,14 @@ void start_stop_map_window() {
     }
 }
 
+#define FPS_INTERVAL 1.0 //seconds.
+
+
 void event_loop() {
+    Uint32 fps_lasttime = SDL_GetTicks(); //the last recorded time.
+    Uint32 fps_current; //the current FPS.
+    Uint32 fps_frames = 0; //frames passed since the last recorded fps.
+    
     SDL_Event e;
     bool quit = false;
     while (!quit) {
@@ -105,11 +112,11 @@ void event_loop() {
                             break;
                         case SDLK_UP:
                             //joypad1.up = true;
-                            move_player(1.0);
+                            move_player(2.0);
                             break;
                         case SDLK_DOWN:
                             //joypad1.down = true;
-                            move_player(-1.0);
+                            move_player(-2.0);
                             break;
                         case SDLK_LEFT:
                             //joypad1.left = true;
@@ -236,6 +243,16 @@ void event_loop() {
         
         //SDL_Delay(16);
         //printf("end drawing loop");
+        
+        // FPS Counting
+        fps_frames++;
+        if (fps_lasttime < SDL_GetTicks() - FPS_INTERVAL*1000)
+        {
+            fps_lasttime = SDL_GetTicks();
+            fps_current = fps_frames;
+            fps_frames = 0;
+            //printf("FPS: %d\n", fps_current);
+        }
     }
     ui_cleanup();
 }

@@ -1,5 +1,5 @@
 //
-//  DDUI.h
+//  ui.h
 //  DDNES
 //
 //  Created by David Kopec on 7/10/18.
@@ -19,8 +19,8 @@
 #include "c11threads.h"
 #include "game.h"
 
-#define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 768
 
 #define MAP_WIDTH 200
 #define MAP_HEIGHT 200

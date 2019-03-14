@@ -25,7 +25,7 @@ void initialize() {
     map->grid = malloc(sizeof(int) * map->width * map->height);
     memcpy(map->grid,
            (int[]) {1, 0, 0, 0, 0, 2, 1, 1,
-                    1, 0, 0, 0, 0, 0, 0, 1,
+                    1, 0, 0, 2, 0, 0, 0, 1,
                     1, 0, 0, 0, 0, 0, 0, 1,
                     1, 0, 0, 0, 0, 0, 0, 2,
                     1, 0, 0, 0, 0, 0, 0, 2,
