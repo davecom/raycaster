@@ -2,9 +2,19 @@
 //  game.c
 //  RayCaster
 //
-//  Created by David Kopec on 3/12/19.
-//  Copyright © 2019 David Kopec. All rights reserved.
+//  Copyright (c) 2019 David Kopec
 //
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 
 #include "game.h"
 
@@ -67,7 +77,6 @@ uint32_t brighten(uint32_t color, float factor) {
     return (alpha | (red & 0xFF000000) | (green & 0x00FF0000) | (blue & 0x0000FF00));
 }
 
-// x is x, h is height
 void draw_column(int x, Wall wall, float scale) {
     int on_each_side = 0;
     float h = wall.height * scale; // scaled wall height
@@ -89,6 +98,9 @@ void draw_column(int x, Wall wall, float scale) {
     }
 }
 
+// The math in this function was originally derived from
+// http://www.playfuljs.com/a-first-person-engine-in-265-lines/
+// but has been modified quite a bit
 int raycast(void *data) {
     initialize();
     float f = 500.0; // focal length

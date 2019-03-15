@@ -1,10 +1,20 @@
 //
 //  ui.c
-//  DDNES
+//  RayCaster
 //
-//  Created by David Kopec on 7/10/18.
-//  Copyright © 2018 David Kopec. All rights reserved.
+//  Copyright (c) 2019 David Kopec
 //
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 
 #include "ui.h"
 
@@ -97,40 +107,28 @@ void event_loop() {
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
                         case SDLK_x:
-                            //joypad1.a = true;
                             break;
                         case SDLK_z:
-                            //joypad1.b = true;
                             break;
                         case SDLK_s:
-                            //printf("start pressed");
-                            //joypad1.start = true;
-                            //printf("%x", joypad1.start);
                             break;
                         case SDLK_a:
-                            //joypad1.select = true;
                             break;
                         case SDLK_UP:
-                            //joypad1.up = true;
                             move_player(2.0);
                             break;
                         case SDLK_DOWN:
-                            //joypad1.down = true;
                             move_player(-2.0);
                             break;
                         case SDLK_LEFT:
-                            //joypad1.left = true;
                             turn_player(-0.05);
                             break;
                         case SDLK_RIGHT:
-                            //joypad1.right = true;
                             turn_player(0.05);
                             break;
                         case SDLK_d:
                             break;
                         case SDLK_n:
-                            //map = !map;
-                            //start_stop_map();
                             break;
                         default:
                             break;
@@ -139,28 +137,20 @@ void event_loop() {
                 case SDL_KEYUP:
                     switch (e.key.keysym.sym) {
                         case SDLK_x:
-                            //joypad1.a = false;
                             break;
                         case SDLK_z:
-                           // joypad1.b = false;
                             break;
                         case SDLK_s:
-                            //joypad1.start = false;
                             break;
                         case SDLK_a:
-                            //joypad1.select = false;
                             break;
                         case SDLK_UP:
-                            //joypad1.up = false;
                             break;
                         case SDLK_DOWN:
-                            //joypad1.down = false;
                             break;
                         case SDLK_LEFT:
-                            //joypad1.left = false;
                             break;
                         case SDLK_RIGHT:
-                            //joypad1.right = false;
                             break;
                         case SDLK_m:
                             map_open = !map_open;
@@ -251,7 +241,7 @@ void event_loop() {
             fps_lasttime = SDL_GetTicks();
             fps_current = fps_frames;
             fps_frames = 0;
-            //printf("FPS: %d\n", fps_current);
+            printf("FPS: %d\n", fps_current);
         }
     }
     ui_cleanup();
