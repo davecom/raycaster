@@ -135,7 +135,7 @@
 		55258B13223767E20046A70A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "David Kopec";
 				TargetAttributes = {
 					55258B1A223767E20046A70A = {
@@ -149,6 +149,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 55258B12223767E20046A70A;
 			productRefGroup = 55258B1C223767E20046A70A /* Products */;
@@ -288,6 +289,7 @@
 		55258B23223767E20046A70A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 59VX8JQ7R6;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -302,6 +304,7 @@
 		55258B24223767E20046A70A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 59VX8JQ7R6;
 				FRAMEWORK_SEARCH_PATHS = (

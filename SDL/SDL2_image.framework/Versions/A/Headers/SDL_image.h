@@ -1,6 +1,6 @@
 /*
   SDL_image:  An example image loading library for use with SDL
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -37,7 +37,7 @@ extern "C" {
 */
 #define SDL_IMAGE_MAJOR_VERSION 2
 #define SDL_IMAGE_MINOR_VERSION 0
-#define SDL_IMAGE_PATCHLEVEL    4
+#define SDL_IMAGE_PATCHLEVEL    5
 
 /* This macro can be used to fill a version structure with the compile-time
  * version of the SDL_image library.
@@ -71,8 +71,7 @@ typedef enum
 {
     IMG_INIT_JPG = 0x00000001,
     IMG_INIT_PNG = 0x00000002,
-    IMG_INIT_TIF = 0x00000004,
-    IMG_INIT_WEBP = 0x00000008
+    IMG_INIT_TIF = 0x00000004
 } IMG_InitFlags;
 
 /* Loads dynamic libraries and prepares them for use.  Flags should be
@@ -137,8 +136,7 @@ extern DECLSPEC SDL_Surface * SDLCALL IMG_LoadTGA_RW(SDL_RWops *src);
 extern DECLSPEC SDL_Surface * SDLCALL IMG_LoadTIF_RW(SDL_RWops *src);
 extern DECLSPEC SDL_Surface * SDLCALL IMG_LoadXCF_RW(SDL_RWops *src);
 extern DECLSPEC SDL_Surface * SDLCALL IMG_LoadXPM_RW(SDL_RWops *src);
-extern DECLSPEC SDL_Surface * SDLCALL IMG_LoadXV_RW(SDL_RWops *src);
-extern DECLSPEC SDL_Surface * SDLCALL IMG_LoadWEBP_RW(SDL_RWops *src);
+extern DECLSPEC SDL_Surface * SDLCALL IMG_LoadXV_RW(SDL_RWops *src);;
 
 extern DECLSPEC SDL_Surface * SDLCALL IMG_ReadXPMFromArray(char **xpm);
 
